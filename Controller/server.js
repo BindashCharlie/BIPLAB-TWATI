@@ -1,57 +1,22 @@
-// /**
-//  * @file main.js
-//  * @brief This file contains the Main class, which initializes the application and runs it.
-//  */
+const express = require('express'); // Import express
+const bodyParser = require('body-parser');
+const postRoutes = require('./routes/posts'); // Adjust the path based on your directory structure
+const swaggerSetup = require('./swagger'); // Import Swagger setup if you added it
 
-// const Data = require("../Model/Data/data");
-// const Endpoint = require("./endpoints/endpoint");
+const app = express(); // Create an instance of Express
+const PORT = 3000;
 
-// /**
-//  * @class Main
-//  * @brief Main class responsible for initializing the data and endpoint, and running the application.
-//  */
-// class Main {
-//     /**
-//      * @brief Constructor for the Main class.
-//      * Initializes a Data object and an Endpoint object.
-//      */
-//     constructor() {
-//         /**
-//          * @var {Object} data
-//          * @brief Data object to manage JSON data.
-//          */
-//         this.data = new Data('data.json');
+// Middleware for parsing JSON data
+app.use(bodyParser.json());
 
-//         /**
-//          * @var {Object} endpoint
-//          * @brief Endpoint object to handle input operations.
-//          */
-//         this.endpoint = new Endpoint(this.data);
-//     }
+// Mount routes
+app.use('/api/posts', postRoutes);
 
-//     /**
-//      * @brief Runs the main application logic.
-//      * Calls the endpoint to handle user input asynchronously.
-//      * 
-//      * @return {Promise<void>} Promise that resolves once the input is handled.
-//      */
-//     async run() {
-//         await this.endpoint.handleInput();
-//     }
-// }
+// Set up Swagger (if included)
+swaggerSetup(app);
 
-// // Run the main application
-// /**
-//  * @brief Instantiate and run the Main application.
-//  */
-// const app = new Main();
-// app.run();
-
-const endpoint = require("./endpoints/endpoint")
-
-function main () {
-    console.log("hello world");
-}
-
-main()
-endpoint()
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+});
